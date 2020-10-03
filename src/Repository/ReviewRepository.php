@@ -19,40 +19,18 @@ class ReviewRepository extends ServiceEntityRepository
         parent::__construct($registry, Review::class);
     }
 
-    // /**
-    //  * @return Review[] Returns an array of Review objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function countReviews($hotelId, \DateTime $dateFrom, \DateTime $dateTo)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('COUNT(r.id) AS review_count')
+            ->join('r.hotel', 'h')
+            ->andWhere('r.createdDate >= :dateFrom')
+            ->andWhere('r.createdDate <= :dateTo')
+            ->andWhere('h.id = :hotelId')
+            ->setParameter('hotelId', $hotelId)
+            ->setParameter('dateFrom', $dateFrom)
+            ->setParameter('dateTo', $dateTo)
             ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Review
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-
-    public function countReviews()
-    {
-        $this->createQueryBuilder('r')
-            ->select(['COUNT(id)'])
-            ->getQuery()
-            ->getArrayResult();
+            ->getSingleResult();
     }
 }
