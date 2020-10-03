@@ -1,0 +1,7 @@
+App\Entity\Review:
+  review_{1..100}:
+    hotel: '@hotel_*'
+    score: <numberBetween(0.0, 5.0)>
+    comment: <text()>
+    createdAt: <dateTimeBetween("-200 days", "now")>
+    updatedAt: <dateTimeBetween($createdAt, "now")>

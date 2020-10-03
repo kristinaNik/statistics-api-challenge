@@ -1,0 +1,5 @@
+App\Entity\Hotel:
+  hotel_{1..10}:
+    name: <name()>
+    createdAt: <dateTimeBetween("-200 days", "now")>
+    updatedAt: <dateTimeBetween($createdAt, "now")>
