@@ -32,7 +32,7 @@ class StatisticsController extends AbstractController
         $dateFrom = Carbon::parse($request->query->get('date_from'))->toDate();
         $dateTo =   Carbon::parse($request->query->get('date_to'))->toDate();
 
-        $json = $serializer->serialize($this->service->getCountReviews($dateFrom, $dateTo, $hotelId), 'json');
+        $json = $serializer->serialize($this->service->getStatistics($dateFrom, $dateTo, $hotelId), 'json');
 
         return new JsonResponse($json, 200, [],true);
     }

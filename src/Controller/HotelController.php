@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Hotel;
 use App\Interfaces\iHotel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class HotelController extends AbstractController
@@ -64,10 +66,19 @@ class HotelController extends AbstractController
      */
     public function postHotels(Request $request, SerializerInterface $serializer): JsonResponse
     {
-        $content = json_decode($request->getContent());
-        $json = $serializer->serialize($this->service->postHotels($content), 'json');
+        $data = $request->getContent();
+        try {
+            $json = $serializer->deserialize($data, Hotel::class, 'json');
+            $response = $this->service->postHotels($json);
 
-        return new JsonResponse($json, 200, [], true);
+            return $this->json($response, 201, []);
+        } catch (NotEncodableValueException $exception) {
+            return $this->json([
+                'status' => 400,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+
     }
 
     /**
@@ -79,10 +90,18 @@ class HotelController extends AbstractController
      */
     public function putHotels(Request $request, $id, SerializerInterface $serializer): JsonResponse
     {
-        $content = json_decode($request->getContent());
-        $json = $serializer->serialize($this->service->putHotels($content, $id), 'json');
+        $data = $request->getContent();
+        try {
+            $json = $serializer->deserialize($data, Hotel::class, 'json');
+            $response = $this->service->putHotels($json, $id);
 
-        return new JsonResponse($json, 200, [], true);
+            return $this->json($response, 201, []);
+        } catch (NotEncodableValueException $exception) {
+            return $this->json([
+                'status' => 400,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

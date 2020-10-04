@@ -29,11 +29,16 @@ class StatisticsService
      * @param $hotelId
      * @return mixed
      */
-    public function getCountReviews(\DateTime $dateFrom, \DateTime $dateTo, $hotelId)
+    public function getStatistics(\DateTime $dateFrom, \DateTime $dateTo, $hotelId)
     {
         $reviewRepo = $this->em->getRepository(Review::class);
         $hotelRepo = $this->em->getRepository(Hotel::class)->find($hotelId);
 
-        return $reviewRepo->countReviews($hotelRepo, $dateFrom, $dateTo);
+        return [
+            'review_count' => $reviewRepo->countReviews($hotelRepo, $dateFrom, $dateTo),
+            'average_score' => $reviewRepo->averageScores($hotelRepo, $dateFrom, $dateTo)
+        ];
     }
+
+
 }

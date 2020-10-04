@@ -25,44 +25,52 @@ class HotelService implements iHotel
         $this->em = $entityManager;
     }
 
+    /**
+     * @return object[]
+     */
     public function getAllHotels()
     {
         return $this->em->getRepository(Hotel::class)->findAll();
     }
 
+    /**
+     * @param $id
+     * @return object|null
+     */
     public function getHotelsById($id)
     {
         return $this->em->getRepository(Hotel::class)->find($id);
     }
 
+    /**
+     * @param $content
+     * @return HotelApiDto
+     */
     public function postHotels($content): HotelApiDto
     {
-        $name = $content->name;
-
-        $hotel = new Hotel();
-        $hotel->setName($name);
-
-        $this->em->persist($hotel);
+        $this->em->persist($content);
         $this->em->flush();
 
-        return $this->prepareResponse($hotel);
+        return $this->prepareResponse($content);
     }
 
+    /**
+     * @param $content
+     * @param $id
+     * @return HotelApiDto
+     */
     public function putHotels($content, $id): HotelApiDto
     {
-        $hotel = $this->em->getRepository(Hotel::class)->findOneBy(['id' => $id]);
-        $name = $content->name;
-        $hotel->setName($name);
-
-        $this->em->persist($hotel);
+        $this->em->persist($content);
         $this->em->flush();
 
-        if ($hotel instanceof Hotel) {
-            return $this->prepareResponse($hotel);
-        }
-
+        return $this->prepareResponse($content);
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public function deleteHotels($id): string
     {
         $hotel = $this->em->getRepository(Hotel::class)->findOneBy(['id' => $id]);
@@ -77,6 +85,10 @@ class HotelService implements iHotel
         return json_encode("The hotel with id " . $id . " has been deleted");
     }
 
+    /**
+     * @param Hotel $hotel
+     * @return HotelApiDto
+     */
     public function prepareResponse(Hotel $hotel): HotelApiDto
     {
         $dto = HotelApiDto::create(

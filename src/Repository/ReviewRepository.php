@@ -22,7 +22,7 @@ class ReviewRepository extends ServiceEntityRepository
     public function countReviews($hotelId, \DateTime $dateFrom, \DateTime $dateTo)
     {
         return $this->createQueryBuilder('r')
-            ->select('COUNT(r.id) AS review_count')
+            ->select('COUNT(r.id) AS count')
             ->join('r.hotel', 'h')
             ->andWhere('r.createdDate >= :dateFrom')
             ->andWhere('r.createdDate <= :dateTo')
@@ -31,6 +31,21 @@ class ReviewRepository extends ServiceEntityRepository
             ->setParameter('dateFrom', $dateFrom)
             ->setParameter('dateTo', $dateTo)
             ->getQuery()
-            ->getSingleResult();
+            ->getSingleScalarResult();
+    }
+
+    public function averageScores($hotelId, \DateTime $dateFrom, \DateTime $dateTo)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('AVG(r.score) AS score')
+            ->join('r.hotel', 'h')
+            ->andWhere('r.createdDate >= :dateFrom')
+            ->andWhere('r.createdDate <= :dateTo')
+            ->andWhere('h.id = :hotelId')
+            ->setParameter('hotelId', $hotelId)
+            ->setParameter('dateFrom', $dateFrom)
+            ->setParameter('dateTo', $dateTo)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

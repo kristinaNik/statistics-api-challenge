@@ -68,7 +68,7 @@ class ReviewController extends AbstractController
         $content = json_decode($request->getContent());
         $json = $serializer->serialize($this->reviewService->postReviews($content), 'json');
 
-        return new JsonResponse($json, 204, [], true);
+        return new JsonResponse($json, 201, [], true);
     }
 
     /**
@@ -83,7 +83,7 @@ class ReviewController extends AbstractController
         $content = json_decode($request->getContent());
         $json = $serializer->serialize($this->reviewService->putReviews($content, $id), 'json');
 
-        return new JsonResponse($json, 204, [], true);
+        return new JsonResponse($json, 201, [], true);
     }
 
     /**
