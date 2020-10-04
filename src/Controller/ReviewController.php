@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\DTO\ReviewApiDto;
+use App\Entity\Review;
+use App\Services\DtoService;
 use App\Services\ReviewService;
 use Carbon\Carbon;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,24 +15,93 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ReviewController extends AbstractController
 {
-
+    /**
+     * @var ReviewService
+     */
     private $reviewService;
 
+    /**
+     * ReviewController constructor.
+     * @param ReviewService $reviewService
+     */
     public function __construct(ReviewService $reviewService)
     {
         $this->reviewService = $reviewService;
     }
 
     /**
-     * @Route("api/reviews/hotel/{hotelId}/overtime", name="reviews_hotel_overtime")
+     * @Route("api/reviews/", name="get_all_reviews",methods={"GET","HEAD"})
+     *
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
      */
-    public function index(Request $request, $hotelId, SerializerInterface $serializer)
+    public function getReviews(Request $request, SerializerInterface $serializer)
     {
-        $dateFrom = Carbon::parse($request->query->get('date_from'))->toDate();
-        $dateTo =   Carbon::parse($request->query->get('date_to'));
+        $json = $serializer->serialize($this->reviewService->getAllReviews(), 'json');
 
-        $json = $serializer->serialize($this->reviewService->getCountReviews($dateFrom, $dateTo, $hotelId), 'json');
-
-        return new JsonResponse($json, 200, [],true);
+        return new JsonResponse($json, 200, [], true);
     }
+
+    /**
+     * @Route("api/reviews/{id}", name="get_review_by_id",methods={"GET","HEAD"})
+     *
+     * @param $id
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    public function getReviewsById(Request $request, $id, SerializerInterface $serializer)
+    {
+        $json = $serializer->serialize($this->reviewService->getReviewsById($id), 'json');
+
+        return new JsonResponse($json, 200, [], true);
+    }
+
+
+    /**
+     * @Route("api/reviews",name="post_reviews",methods={"POST"})
+     *
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    public function postReviews(Request $request, SerializerInterface $serializer): JsonResponse
+    {
+        $content = json_decode($request->getContent());
+        $json = $serializer->serialize($this->reviewService->postReviews($content), 'json');
+
+        return new JsonResponse($json, 200, [], true);
+    }
+
+    /**
+     * @Route("api/reviews/{id}",name="put_reviews",methods={"PUT"})
+     *
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    public function putReviews(Request $request, $id, SerializerInterface $serializer): JsonResponse
+    {
+        $content = json_decode($request->getContent());
+        $json = $serializer->serialize($this->reviewService->putReviews($content, $id), 'json');
+
+        return new JsonResponse($json, 200, [], true);
+    }
+
+    /**
+     * @Route("api/reviews/{id}",name="delete_reviews",methods={"DELETE"})
+     *
+     * @param Request $request
+     * @param $id
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    public function deleteReviews(Request $request, $id, SerializerInterface $serializer): JsonResponse
+    {
+        $json = $serializer->serialize($this->reviewService->deleteReviews($id), 'json');
+
+        return new JsonResponse($json, 200, [], true);
+    }
+
 }
