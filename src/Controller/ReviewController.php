@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 
-use App\DTO\ReviewApiDto;
-use App\Entity\Review;
-use App\Services\DtoService;
+use App\Interfaces\iReview;
 use App\Services\ReviewService;
-use Carbon\Carbon;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,15 +13,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ReviewController extends AbstractController
 {
     /**
-     * @var ReviewService
+     * @var iReview
      */
     private $reviewService;
 
     /**
      * ReviewController constructor.
-     * @param ReviewService $reviewService
+     * @param iReview $reviewService
      */
-    public function __construct(ReviewService $reviewService)
+    public function __construct(iReview $reviewService)
     {
         $this->reviewService = $reviewService;
     }
@@ -71,7 +68,7 @@ class ReviewController extends AbstractController
         $content = json_decode($request->getContent());
         $json = $serializer->serialize($this->reviewService->postReviews($content), 'json');
 
-        return new JsonResponse($json, 200, [], true);
+        return new JsonResponse($json, 204, [], true);
     }
 
     /**
@@ -86,7 +83,7 @@ class ReviewController extends AbstractController
         $content = json_decode($request->getContent());
         $json = $serializer->serialize($this->reviewService->putReviews($content, $id), 'json');
 
-        return new JsonResponse($json, 200, [], true);
+        return new JsonResponse($json, 204, [], true);
     }
 
     /**

@@ -6,11 +6,12 @@ namespace App\Services;
 use App\DTO\ReviewApiDto;
 use App\Entity\Hotel;
 use App\Entity\Review;
+use App\Interfaces\iReview;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Fractal\TransformerAbstract;
 
-class ReviewService
+class ReviewService implements iReview
 {
     /**
      * @var EntityManagerInterface
@@ -118,14 +119,16 @@ class ReviewService
      * @param Review $review
      * @return ReviewApiDto
      */
-    private function prepareResponse(Review $review): ReviewApiDto
+    public function prepareResponse(Review $review): ReviewApiDto
     {
         $dto = ReviewApiDto::create(
             $review->getId(),
             $review->getHotel(),
             $review->getScore(),
             $review->getComment(),
-            $review->getCreatedDate()
+            $review->getCreatedDate(),
+            $review->getCreatedAt(),
+            $review->getUpdatedAt()
         );
 
         return $dto;

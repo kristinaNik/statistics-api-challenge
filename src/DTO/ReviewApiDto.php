@@ -1,73 +1,137 @@
 <?php
 
-
 namespace App\DTO;
 
-
-use App\Entity\Review;
+use App\Entity\Hotel;
 
 class ReviewApiDto
 {
 
+    /**
+     * @var int
+     */
     private $id;
 
+    /**
+     * @var Hotel
+     */
     private $hoteId;
 
+    /**
+     * @var float
+     */
     private $score;
 
+    /**
+     * @var string
+     */
     private $comment;
 
+    /**
+     * @var \DateTime
+     */
     private $createdDate;
 
-    public function __construct($id,$hoteId, $score, $comment, $createdDate)
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * ReviewApiDto constructor.
+     * @param int $id
+     * @param Hotel $hoteId
+     * @param float $score
+     * @param string $comment
+     * @param \DateTime $createdDate
+     * @param \DateTime $createdAt
+     * @param \DateTime $updatedAt
+     */
+    public function __construct(int $id, Hotel $hoteId, float $score, string $comment, \DateTime $createdDate, \DateTime $createdAt, \DateTime $updatedAt)
     {
         $this->id = $id;
         $this->hoteId = $hoteId;
         $this->score = $score;
         $this->comment = $comment;
         $this->createdDate = $createdDate;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
 
-    public static function create($id, $hoteId, $score, $comment, $createdDate)
+    /**
+     * @param $id
+     * @param $hoteId
+     * @param $score
+     * @param $comment
+     * @param $createdDate
+     * @param $createdAt
+     * @param $updatedAt
+     * @return ReviewApiDto
+     */
+    public static function create($id, $hoteId, $score, $comment, $createdDate, $createdAt, $updatedAt): ReviewApiDto
     {
-        return new self($id, $hoteId, $score, $comment, $createdDate);
+        return new self($id, $hoteId, $score, $comment, $createdDate, $createdAt, $updatedAt);
     }
 
-    public function getId()
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @return mixed
+     * @return Hotel
      */
-    public function getHoteId()
+    public function getHoteId(): Hotel
     {
         return $this->hoteId;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getScore()
+    public function getScore(): float
     {
         return $this->score;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getComment()
+    public function getComment(): string
     {
         return $this->comment;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getCreatedDate()
+    public function getCreatedDate(): \DateTime
     {
         return $this->createdDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
     }
 
 }

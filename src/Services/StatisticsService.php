@@ -26,6 +26,7 @@ class StatisticsService
     /**
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
+     * @param $hotelId
      * @return mixed
      */
     public function getCountReviews(\DateTime $dateFrom, \DateTime $dateTo, $hotelId)
