@@ -48,4 +48,52 @@ class ReviewRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function groupDatesByWeek($hotelId,  \DateTime $dateFrom, \DateTime $dateTo)
+    {
+        return $this->createQueryBuilder('r')
+            ->select(['COUNT(r.id) AS review_count', 'AVG(r.score) AS average_score', 'WEEK(r.createdDate) AS weeks'])
+            ->join('r.hotel', 'h')
+            ->andWhere('h.id = :hotelId')
+            ->andWhere('r.createdDate >= :dateFrom')
+            ->andWhere('r.createdDate <= :dateTo')
+            ->setParameter('hotelId', $hotelId)
+            ->setParameter('dateFrom', $dateFrom)
+            ->setParameter('dateTo', $dateTo)
+            ->groupBy('weeks')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function groupDatesByDay($hotelId,  \DateTime $dateFrom, \DateTime $dateTo)
+    {
+        return $this->createQueryBuilder('r')
+            ->select(['COUNT(r.id) AS review_count', 'AVG(r.score) AS average_score', 'DAY(r.createdDate) AS days'])
+            ->join('r.hotel', 'h')
+            ->andWhere('h.id = :hotelId')
+            ->andWhere('r.createdDate >= :dateFrom')
+            ->andWhere('r.createdDate <= :dateTo')
+            ->setParameter('hotelId', $hotelId)
+            ->setParameter('dateFrom', $dateFrom)
+            ->setParameter('dateTo', $dateTo)
+            ->groupBy('days')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function groupDatesByMonth($hotelId,  \DateTime $dateFrom, \DateTime $dateTo)
+    {
+        return $this->createQueryBuilder('r')
+            ->select(['COUNT(r.id) AS review_count', 'AVG(r.score) AS average_score', 'MONTH(r.createdDate) AS months'])
+            ->join('r.hotel', 'h')
+            ->andWhere('h.id = :hotelId')
+            ->andWhere('r.createdDate >= :dateFrom')
+            ->andWhere('r.createdDate <= :dateTo')
+            ->setParameter('hotelId', $hotelId)
+            ->setParameter('dateFrom', $dateFrom)
+            ->setParameter('dateTo', $dateTo)
+            ->groupBy('months')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

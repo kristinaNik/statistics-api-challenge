@@ -5,6 +5,9 @@ namespace App\Services;
 
 use App\Entity\Hotel;
 use App\Entity\Review;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StatisticsService
@@ -35,10 +38,13 @@ class StatisticsService
         $hotelRepo = $this->em->getRepository(Hotel::class)->find($hotelId);
 
         return [
-            'review_count' => $reviewRepo->countReviews($hotelRepo, $dateFrom, $dateTo),
-            'average_score' => $reviewRepo->averageScores($hotelRepo, $dateFrom, $dateTo)
+            'review-count' => $reviewRepo->countReviews($hotelRepo, $dateFrom, $dateTo),
+            'average-score' => $reviewRepo->averageScores($hotelRepo, $dateFrom, $dateTo),
+            'date-group' => [
+                'daily' => $reviewRepo->groupDatesByDay($hotelRepo, $dateFrom, $dateTo),
+                'weekly' => $reviewRepo->groupDatesByWeek($hotelRepo, $dateFrom, $dateTo),
+                'monthly' => $reviewRepo->groupDatesByMonth($hotelRepo, $dateFrom, $dateTo)
+            ]
         ];
     }
-
-
 }
