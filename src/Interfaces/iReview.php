@@ -12,6 +12,8 @@ interface iReview
 
     public function getReviewsById($id);
 
+    public function getHotelById($id);
+
     public function postReviews($content): ReviewApiDto;
 
     public function putReviews($content, $id): ReviewApiDto;

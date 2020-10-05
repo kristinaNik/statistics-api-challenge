@@ -8,47 +8,52 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Faker\Factory;
 
-class HotelEndpointsTest extends AbstractEndpointTest
+class ReviewEndpointsTest extends AbstractEndpointTest
 {
     private const HOST = 'http://statistics-api.local';
-    private const HOTEL_RESPONSE = '{"name" : "%s"}';
+    private const REVIEW_RESPONSE = '{"id" : %d,
+                              "hotel" : {"name" : "%s", "createdAt" : "%s", "updatedAt" : "%s"},
+                              "score" : %d,
+                              "comment" : "%s",
+                              "createdDate" : "%s",
+                              "createdAt" : "%s",
+                              "updatedAt" :"%s"}';
 
-    public function testGetHotels(): void
+    public function testGetReviews(): void
     {
-        $response = $this->getResponseFromRequest(Request::METHOD_GET , 'api/hotels.json');
+        $response = $this->getResponseFromRequest(Request::METHOD_GET , 'api/reviews.json');
         $responseContent = $response->getContent();
         $responseDecoded = json_decode($responseContent);
 
         self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         self::assertJson($responseContent);
         self::assertNotEmpty($responseDecoded);
-
     }
 
-    public function testPostHotels(): void
+    public function testPostReviews(): void
     {
         $apiResponse =  new MockResponse($this->getPayload());
 
         $httpClient = new MockHttpClient($apiResponse);
-        $response = $httpClient->request(Request::METHOD_POST,
-            self::HOST . '/api/hotels',
+        $response = $httpClient->request(Request::METHOD_POST ,
+            self::HOST . '/api/reviews',
             ['ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json']);
+
         $responseContent = $response->getContent();
         $responseDecoded = json_decode($responseContent);
 
         self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         self::assertJson($responseContent);
         self::assertNotEmpty($responseDecoded);
-
     }
 
-    public function testPutHotels(): void
+    public function testPutReviews(): void
     {
         $apiResponse =  new MockResponse($this->getPayload());
 
         $httpClient = new MockHttpClient($apiResponse);
         $response = $httpClient->request(Request::METHOD_PUT ,
-            self::HOST . '/api/hotels/' . $this->getHotelId(),
+            self::HOST . '/api/reviews/' . $this->getReviewId(),
             ['ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json']);
 
         $responseContent = $response->getContent();
@@ -59,7 +64,7 @@ class HotelEndpointsTest extends AbstractEndpointTest
         self::assertNotEmpty($responseDecoded);
     }
 
-    public function getHotelId(): int
+    public function getReviewId(): int
     {
         $faker = Factory::create();
 
@@ -70,6 +75,18 @@ class HotelEndpointsTest extends AbstractEndpointTest
     {
         $faker = Factory::create();
 
-        return sprintf(self::HOTEL_RESPONSE,  $faker->name);
+        return str_replace('\n', '',sprintf(self::REVIEW_RESPONSE,
+            $faker->numberBetween(1,11),
+            $faker->name,
+            $faker->date('Y-m-d'),
+            $faker->date('Y-m-d'),
+            $faker->numberBetween(0, 5),
+            $faker->text,
+            $faker->text,
+            $faker->date('Y-m-d'),
+            $faker->date('Y-m-d'),
+            $faker->date('Y-m-d')
+        ));
+
     }
 }

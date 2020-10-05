@@ -45,4 +45,13 @@ class StatisticsService implements iStatistics
             ]
         ];
     }
+
+    /**
+     * @param $id
+     * @return object|null
+     */
+    public function getHotelById($id)
+    {
+        return $this->em->getRepository(Hotel::class)->find($id);
+    }
 }

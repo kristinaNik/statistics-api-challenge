@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Review;
 use App\Interfaces\iReview;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,7 +26,13 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("api/reviews/", name="get_all_reviews",methods={"GET","HEAD"})
+     * @Route("api/reviews.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="get_all_reviews",
+     *     methods={"GET","HEAD"})
      *
      * @param Request $request
      * @return JsonResponse
@@ -40,7 +45,13 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("api/reviews/{id}", name="get_review_by_id",methods={"GET","HEAD"})
+     * @Route("api/reviews/{id}.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="get_review_by_id",
+     *     methods={"GET","HEAD"})
      *
      * @param $id
      * @param Request $request
@@ -58,7 +69,13 @@ class ReviewController extends AbstractController
 
 
     /**
-     * @Route("api/reviews",name="post_reviews",methods={"POST"})
+     * @Route("api/reviews.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="post_reviews",
+     *     methods={"POST"})
      *
      * @param Request $request
      * @param SerializerInterface $serializer
@@ -78,7 +95,13 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("api/reviews/{id}",name="put_reviews",methods={"PUT"})
+     * @Route("api/reviews/{id}.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="put_reviews",
+     *     methods={"PUT"})
      *
      * @param Request $request
      * @param SerializerInterface $serializer
@@ -98,7 +121,13 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("api/reviews/{id}",name="delete_reviews",methods={"DELETE"})
+     * @Route("api/reviews/{id}.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="delete_reviews",
+     *     methods={"DELETE"})
      *
      * @param Request $request
      * @param $id

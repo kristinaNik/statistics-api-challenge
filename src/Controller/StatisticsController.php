@@ -46,8 +46,12 @@ class StatisticsController extends AbstractController
         $dateFrom = Carbon::create($request->query->get('date_from'))->toDate();
         $dateTo =   Carbon::parse($request->query->get('date_to'))->toDate();
 
-        $json = $serializer->serialize($this->service->getStatistics($dateFrom, $dateTo, $hotelId), 'json');
+        if ($this->service->getHotelById($hotelId) === null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
 
-        return new JsonResponse($json, 200, [],true);
+        $response = $this->service->getStatistics($dateFrom, $dateTo, $hotelId);
+
+        return $this->json($response, 200, []);
     }
 }
