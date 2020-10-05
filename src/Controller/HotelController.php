@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class HotelController extends AbstractController
 {
@@ -56,52 +57,50 @@ class HotelController extends AbstractController
         return new JsonResponse($json, 200, [], true);
     }
 
-
     /**
      * @Route("api/hotels",name="post_hotels",methods={"POST"})
      *
      * @param Request $request
      * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
      * @return JsonResponse
      */
-    public function postHotels(Request $request, SerializerInterface $serializer): JsonResponse
+    public function postHotels(Request $request, SerializerInterface $serializer,ValidatorInterface $validator): JsonResponse
     {
         $data = $request->getContent();
-        try {
-            $json = $serializer->deserialize($data, Hotel::class, 'json');
-            $response = $this->service->postHotels($json);
+        $json = $serializer->deserialize($data, Hotel::class, 'json');
 
-            return $this->json($response, 201, []);
-        } catch (NotEncodableValueException $exception) {
-            return $this->json([
-                'status' => 400,
-                'message' => $exception->getMessage()
-            ], 400);
+        $errors  = $validator->validate($json);
+        if (count($errors) > 0) {
+            return $this->json($errors, 400);
         }
 
+        $response = $this->service->postHotels($json);
+        return $this->json($response, 201, []);
     }
 
     /**
      * @Route("api/hotels/{id}",name="put_hotels",methods={"PUT"})
      *
      * @param Request $request
+     * @param $id
      * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
      * @return JsonResponse
      */
-    public function putHotels(Request $request, $id, SerializerInterface $serializer): JsonResponse
+    public function putHotels(Request $request, $id, SerializerInterface $serializer,ValidatorInterface $validator): JsonResponse
     {
         $data = $request->getContent();
-        try {
-            $json = $serializer->deserialize($data, Hotel::class, 'json');
-            $response = $this->service->putHotels($json, $id);
+        $json = $serializer->deserialize($data, Hotel::class, 'json');
 
-            return $this->json($response, 201, []);
-        } catch (NotEncodableValueException $exception) {
-            return $this->json([
-                'status' => 400,
-                'message' => $exception->getMessage()
-            ], 400);
+        $errors  = $validator->validate($json);
+        if (count($errors) > 0) {
+            return $this->json($errors, 400);
         }
+
+        $response = $this->service->putHotels($json, $id);
+        return $this->json($response, 201, []);
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Interfaces\iStatistics;
 use App\Services\StatisticsService;
 use Carbon\Carbon;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,9 +13,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class StatisticsController extends AbstractController
 {
+    /**
+     * @var iStatistics|StatisticsService
+     */
     private $service;
 
-    public function __construct(StatisticsService $service)
+    /**
+     * StatisticsController constructor.
+     * @param iStatistics $service
+     */
+    public function __construct(iStatistics $service)
     {
         $this->service = $service;
     }

@@ -5,12 +5,10 @@ namespace App\Services;
 
 use App\Entity\Hotel;
 use App\Entity\Review;
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
-use Carbon\CarbonPeriod;
+use App\Interfaces\iStatistics;
 use Doctrine\ORM\EntityManagerInterface;
 
-class StatisticsService
+class StatisticsService implements iStatistics
 {
     /**
      * @var EntityManagerInterface

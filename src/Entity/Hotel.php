@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\HotelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints AS Assert;
 
 /**
  * @ORM\Entity(repositoryClass=HotelRepository::class)
@@ -22,6 +23,7 @@ class Hotel
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
