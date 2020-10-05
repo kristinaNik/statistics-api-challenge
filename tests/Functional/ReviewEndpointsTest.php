@@ -18,6 +18,7 @@ class ReviewEndpointsTest extends AbstractEndpointTest
                               "createdDate" : "%s",
                               "createdAt" : "%s",
                               "updatedAt" :"%s"}';
+    private const DELETE_RESPONSE = '{"message" : "Resource successfully deleted"}';
 
     public function testGetReviews(): void
     {
@@ -53,6 +54,23 @@ class ReviewEndpointsTest extends AbstractEndpointTest
 
         $httpClient = new MockHttpClient($apiResponse);
         $response = $httpClient->request(Request::METHOD_PUT ,
+            self::HOST . '/api/reviews/' . $this->getReviewId(),
+            ['ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json']);
+
+        $responseContent = $response->getContent();
+        $responseDecoded = json_decode($responseContent);
+
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertJson($responseContent);
+        self::assertNotEmpty($responseDecoded);
+    }
+
+    public function testDeleteHotels(): void
+    {
+        $apiResponse =  new MockResponse(self::DELETE_RESPONSE);
+
+        $httpClient = new MockHttpClient($apiResponse);
+        $response = $httpClient->request(Request::METHOD_DELETE ,
             self::HOST . '/api/reviews/' . $this->getReviewId(),
             ['ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json']);
 

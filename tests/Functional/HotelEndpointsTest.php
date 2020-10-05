@@ -12,6 +12,7 @@ class HotelEndpointsTest extends AbstractEndpointTest
 {
     private const HOST = 'http://statistics-api.local';
     private const HOTEL_RESPONSE = '{"name" : "%s"}';
+    private const DELETE_RESPONSE = '{"message" : "Resource successfully deleted"}';
 
     public function testGetHotels(): void
     {
@@ -58,6 +59,25 @@ class HotelEndpointsTest extends AbstractEndpointTest
         self::assertJson($responseContent);
         self::assertNotEmpty($responseDecoded);
     }
+
+
+    public function testDeleteHotels(): void
+    {
+        $apiResponse =  new MockResponse(self::DELETE_RESPONSE);
+
+        $httpClient = new MockHttpClient($apiResponse);
+        $response = $httpClient->request(Request::METHOD_DELETE ,
+            self::HOST . '/api/hotels/' . $this->getHotelId(),
+            ['ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json']);
+
+        $responseContent = $response->getContent();
+        $responseDecoded = json_decode($responseContent);
+
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertJson($responseContent);
+        self::assertNotEmpty($responseDecoded);
+    }
+
 
     public function getHotelId(): int
     {
