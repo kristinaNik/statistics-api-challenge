@@ -16,7 +16,7 @@ interface iReview
 
     public function putReviews($content, $id): ReviewApiDto;
 
-    public function deleteReviews($id): string;
+    public function deleteReviews($id);
 
     public function prepareResponse(Review $review): ReviewApiDto;
 }

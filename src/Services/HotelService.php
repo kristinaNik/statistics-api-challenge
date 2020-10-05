@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services;
-
 
 use App\DTO\HotelApiDto;
 use App\Entity\Hotel;
@@ -69,20 +67,13 @@ class HotelService implements iHotel
 
     /**
      * @param $id
-     * @return string
      */
-    public function deleteHotels($id): string
+    public function deleteHotels($id)
     {
         $hotel = $this->em->getRepository(Hotel::class)->findOneBy(['id' => $id]);
 
-        if ($hotel === null) {
-            return json_encode("This hotel has already been deleted", 400);
-        }
-
         $this->em->remove($hotel);
         $this->em->flush();
-
-        return json_encode("The hotel with id " . $id . " has been deleted");
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\DTO\ReviewApiDto;
@@ -9,7 +8,6 @@ use App\Entity\Review;
 use App\Interfaces\iReview;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Fractal\TransformerAbstract;
 
 class ReviewService implements iReview
 {
@@ -45,6 +43,10 @@ class ReviewService implements iReview
         return $this->em->getRepository(Review::class)->find($id);
     }
 
+    /**
+     * @param $id
+     * @return object|null
+     */
     public function getHotelById($id)
     {
         return $this->em->getRepository(Hotel::class)->find($id);
@@ -103,20 +105,15 @@ class ReviewService implements iReview
 
     /**
      * @param $id
-     * @return string
+     * @return string|void
      */
-    public function deleteReviews($id): string
+    public function deleteReviews($id)
     {
         $review = $this->em->getRepository(Review::class)->findOneBy(['id' => $id]);
-
-        if ($review === null) {
-            return json_encode("This review has already been deleted", 400);
-        }
 
         $this->em->remove($review);
         $this->em->flush();
 
-        return json_encode("The review with id " . $id . " has been deleted");
     }
 
 

@@ -17,7 +17,7 @@ interface iHotel
 
     public function putHotels($content, $id): HotelApiDto;
 
-    public function deleteHotels($id): string;
+    public function deleteHotels($id);
 
     public function prepareResponse(Hotel $review): HotelApiDto;
 

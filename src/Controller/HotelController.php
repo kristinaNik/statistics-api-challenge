@@ -29,7 +29,13 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/", name="get_all_hotels",methods={"GET","HEAD"})
+     * @Route("api/hotels.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="get_all_hotels",
+     *     methods={"GET"})
      *
      * @param Request $request
      * @return JsonResponse
@@ -42,7 +48,13 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/{id}", name="get_hotels_by_id",methods={"GET","HEAD"})
+     * @Route("api/hotels/{id}.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="get_hotels_by_id",
+     *     methods={"GET"})
      *
      * @param $id
      * @param Request $request
@@ -60,7 +72,13 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels",name="post_hotels",methods={"POST"})
+     * @Route("api/hotels.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="post_hotels",
+     *     methods={"POST"})
      *
      * @param Request $request
      * @param SerializerInterface $serializer
@@ -82,7 +100,13 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/{id}",name="put_hotels",methods={"PUT"})
+     * @Route("api/hotels/{id}.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="put_hotels",
+     *     methods={"PUT"})
      *
      * @param Request $request
      * @param $id
@@ -110,7 +134,13 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/{id}",name="delete_hotels",methods={"DELETE"})
+     * @Route("api/hotels/{id}.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="delete_hotels",
+     *     methods={"DELETE"})
      *
      * @param Request $request
      * @param $id

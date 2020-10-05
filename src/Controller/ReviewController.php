@@ -112,7 +112,7 @@ class ReviewController extends AbstractController
 
         $this->reviewService->deleteReviews($id);
 
-        return $this->json(['message' => 'Resource successfully deleted'], 200, [], true);
+        return $this->json(['message' => 'Resource successfully deleted'], 200, []);
     }
 
 }

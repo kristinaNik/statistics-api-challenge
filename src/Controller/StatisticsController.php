@@ -28,7 +28,13 @@ class StatisticsController extends AbstractController
     }
 
     /**
-     * @Route("api/statistics/hotel/{hotelId}/overtime", name="statistics_hotel_overtime")
+     * @Route("api/statistics/hotel/{hotelId}/overtime.{_format}",
+     *     format="json",
+     *     requirements={
+     *         "_format": "json",
+     *     },
+     *     name="statistics_hotel_overtime",
+     *     methods={"GET"})
      *
      * @param Request $request
      * @param $hotelId
