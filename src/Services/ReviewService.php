@@ -45,6 +45,11 @@ class ReviewService implements iReview
         return $this->em->getRepository(Review::class)->find($id);
     }
 
+    public function getHotelById($id)
+    {
+        return $this->em->getRepository(Hotel::class)->find($id);
+    }
+
     /**
      * @param $content
      * @return ReviewApiDto

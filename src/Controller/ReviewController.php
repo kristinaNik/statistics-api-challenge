@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Review;
 use App\Interfaces\iReview;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,14 +30,13 @@ class ReviewController extends AbstractController
      * @Route("api/reviews/", name="get_all_reviews",methods={"GET","HEAD"})
      *
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getReviews(Request $request, SerializerInterface $serializer)
+    public function getReviews(Request $request)
     {
-        $json = $serializer->serialize($this->reviewService->getAllReviews(), 'json');
+        $data = $this->reviewService->getAllReviews();
 
-        return new JsonResponse($json, 200, [], true);
+        return $this->json($data, 200, []);
     }
 
     /**
@@ -44,14 +44,16 @@ class ReviewController extends AbstractController
      *
      * @param $id
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getReviewsById(Request $request, $id, SerializerInterface $serializer)
+    public function getReviewsById(Request $request, $id)
     {
-        $json = $serializer->serialize($this->reviewService->getReviewsById($id), 'json');
+        $data = $this->reviewService->getReviewsById($id);
+        if ($data === null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
 
-        return new JsonResponse($json, 200, [], true);
+        return $this->json($data, 200, []);
     }
 
 
@@ -65,9 +67,14 @@ class ReviewController extends AbstractController
     public function postReviews(Request $request, SerializerInterface $serializer): JsonResponse
     {
         $content = json_decode($request->getContent());
-        $json = $serializer->serialize($this->reviewService->postReviews($content), 'json');
 
-        return new JsonResponse($json, 201, [], true);
+        if ($this->reviewService->getHotelById($content->hotelId) === null) {
+            return  $this->json(['message' => 'Hotel does not exist'], 404, []);
+        }
+
+        $data = $serializer->serialize($this->reviewService->postReviews($content), 'json');
+
+        return new JsonResponse($data, 201, [], true);
     }
 
     /**
@@ -80,6 +87,11 @@ class ReviewController extends AbstractController
     public function putReviews(Request $request, $id, SerializerInterface $serializer): JsonResponse
     {
         $content = json_decode($request->getContent());
+
+        if ($this->reviewService->getReviewsById($id) && $this->reviewService->getHotelById($content->hotelId) === null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
+
         $json = $serializer->serialize($this->reviewService->putReviews($content, $id), 'json');
 
         return new JsonResponse($json, 201, [], true);
@@ -90,14 +102,17 @@ class ReviewController extends AbstractController
      *
      * @param Request $request
      * @param $id
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function deleteReviews(Request $request, $id, SerializerInterface $serializer): JsonResponse
+    public function deleteReviews(Request $request, $id): JsonResponse
     {
-        $json = $serializer->serialize($this->reviewService->deleteReviews($id), 'json');
+        if ($this->reviewService->getReviewsById($id) ===  null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
 
-        return new JsonResponse($json, 200, [], true);
+        $this->reviewService->deleteReviews($id);
+
+        return $this->json(['message' => 'Resource successfully deleted'], 200, [], true);
     }
 
 }

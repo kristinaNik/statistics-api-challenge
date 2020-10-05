@@ -32,14 +32,13 @@ class HotelController extends AbstractController
      * @Route("api/hotels/", name="get_all_hotels",methods={"GET","HEAD"})
      *
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getHotels(Request $request, SerializerInterface $serializer)
+    public function getHotels(Request $request)
     {
-        $json = $serializer->serialize($this->service->getAllHotels(), 'json');
+        $data = $this->service->getAllHotels();
 
-        return new JsonResponse($json, 200, [], true);
+        return $this->json($data, 200, []);
     }
 
     /**
@@ -47,14 +46,17 @@ class HotelController extends AbstractController
      *
      * @param $id
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getHotelsById(Request $request, $id, SerializerInterface $serializer)
+    public function getHotelsById(Request $request, $id)
     {
-        $json = $serializer->serialize($this->service->getHotelsById($id), 'json');
+        $data = $this->service->getHotelsById($id);
 
-        return new JsonResponse($json, 200, [], true);
+        if ($data === null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
+
+        return $this->json($data, 200, []);
     }
 
     /**
@@ -90,6 +92,10 @@ class HotelController extends AbstractController
      */
     public function putHotels(Request $request, $id, SerializerInterface $serializer,ValidatorInterface $validator): JsonResponse
     {
+        if ($this->service->getHotelsById($id) === null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
+
         $data = $request->getContent();
         $json = $serializer->deserialize($data, Hotel::class, 'json');
 
@@ -113,9 +119,13 @@ class HotelController extends AbstractController
      */
     public function deleteHotels(Request $request, $id, SerializerInterface $serializer): JsonResponse
     {
-        $json = $serializer->serialize($this->service->deleteHotels($id), 'json');
+        if ($this->service->getHotelsById($id) === null) {
+            return $this->json(['message' => "The resource does not exist"], 404, []);
+        }
 
-        return new JsonResponse($json, 200, [], true);
+        $this->service->deleteHotels($id);
+
+        return $this->json(['message' => 'Resource successfully deleted'], 200, []);
     }
 
 }
