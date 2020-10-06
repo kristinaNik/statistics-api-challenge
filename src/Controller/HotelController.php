@@ -39,7 +39,7 @@ class HotelController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getHotels(Request $request)
+    public function getHotels(Request $request): JsonResponse
     {
         $data = $this->service->getAllHotels();
 
@@ -59,7 +59,7 @@ class HotelController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getHotelsById(Request $request, $id)
+    public function getHotelsById(Request $request, $id): JsonResponse
     {
         $data = $this->service->getHotelsById($id);
 

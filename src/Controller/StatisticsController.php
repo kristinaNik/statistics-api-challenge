@@ -38,10 +38,9 @@ class StatisticsController extends AbstractController
      *
      * @param Request $request
      * @param $hotelId
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function index(Request $request, $hotelId, SerializerInterface $serializer): JsonResponse
+    public function index(Request $request, $hotelId): JsonResponse
     {
         $dateFrom = Carbon::create($request->query->get('date_from'))->toDate();
         $dateTo =   Carbon::parse($request->query->get('date_to'))->toDate();

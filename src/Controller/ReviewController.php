@@ -37,7 +37,7 @@ class ReviewController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getReviews(Request $request)
+    public function getReviews(Request $request): JsonResponse
     {
         $data = $this->reviewService->getAllReviews();
 
@@ -57,7 +57,7 @@ class ReviewController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getReviewsById(Request $request, $id)
+    public function getReviewsById(Request $request, $id): JsonResponse
     {
         $data = $this->reviewService->getReviewsById($id);
         if ($data === null) {

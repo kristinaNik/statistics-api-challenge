@@ -83,12 +83,11 @@ class SwaggerDecorator implements NormalizerInterface
             ],
         ];
         $customDefinition = [
+            'in' => 'query',
             'name' => 'hotelId',
             'description' => 'Numeric ID of the hotel',
-            'default' => 'hotelId',
-            'in' => 'query',
+            'default' => 'hotelId'
         ];
-
 
         $documentation = [
             'paths' => [
@@ -97,7 +96,6 @@ class SwaggerDecorator implements NormalizerInterface
                         'tags' => ['Statistics'],
                         'summary' => 'Get the statistics of the hotel reviews.',
                         'parameters' =>  $customDefinition,
-
                         'responses' => [
                             Response::HTTP_OK => [
                                 'description' => 'Statistics collection response',
