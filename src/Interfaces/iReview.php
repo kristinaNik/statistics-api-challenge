@@ -14,11 +14,12 @@ interface iReview
 
     public function getHotelById($id);
 
-    public function postReviews($content): ReviewApiDto;
+    public function postReviews($content): Review;
 
-    public function putReviews($content, $id): ReviewApiDto;
+    public function putReviews($content, $id): Review;
 
     public function deleteReviews($id);
 
-    public function prepareResponse(Review $review): ReviewApiDto;
+    public function prepareResponse(Review $review): Review;
+
 }

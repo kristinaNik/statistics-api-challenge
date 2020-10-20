@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\ReviewApiDto;
+use App\DTO\ReviewAssembler;
 use App\Entity\Hotel;
 use App\Entity\Review;
 use App\Interfaces\iReview;
@@ -17,12 +18,20 @@ class ReviewService implements iReview
     private $em;
 
     /**
-     * ReviewService constructor.
-     * @param EntityManagerInterface $entityManager
+     * @var ReviewAssembler
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    private $assembler;
+
+    /**
+     * ReviewService constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param ReviewAssembler $assembler
+     */
+    public function __construct(EntityManagerInterface $entityManager, ReviewAssembler $assembler)
     {
         $this->em = $entityManager;
+        $this->assembler = $assembler;
     }
 
 
@@ -54,9 +63,9 @@ class ReviewService implements iReview
 
     /**
      * @param $content
-     * @return ReviewApiDto
+     * @return Review
      */
-    public function postReviews($content): ReviewApiDto
+    public function postReviews($content): Review
     {
         $hotelId = $this->em->getRepository(Hotel::class)->findOneBy(['id' => $content->hotelId]);
         $score = $content->score;
@@ -79,9 +88,9 @@ class ReviewService implements iReview
     /**
      * @param $content
      * @param $id
-     * @return ReviewApiDto
+     * @return Review
      */
-    public function putReviews($content, $id): ReviewApiDto
+    public function putReviews($content, $id): Review
     {
         $review = $this->em->getRepository(Review::class)->findOneBy(['id' => $id]);
         $hotelId = $this->em->getRepository(Hotel::class)->findOneBy(['id' => $content->hotelId]);
@@ -116,14 +125,13 @@ class ReviewService implements iReview
 
     }
 
-
     /**
      * @param Review $review
-     * @return ReviewApiDto
+     * @return Review
      */
-    public function prepareResponse(Review $review): ReviewApiDto
+    public function prepareResponse(Review $review): Review
     {
-        $dto = ReviewApiDto::create(
+        $dto = $this->assembler->reviewDto(new ReviewApiDto(
             $review->getId(),
             $review->getHotel(),
             $review->getScore(),
@@ -131,7 +139,7 @@ class ReviewService implements iReview
             $review->getCreatedDate(),
             $review->getCreatedAt(),
             $review->getUpdatedAt()
-        );
+        ));
 
         return $dto;
     }

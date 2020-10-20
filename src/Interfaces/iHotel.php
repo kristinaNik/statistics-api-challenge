@@ -13,12 +13,12 @@ interface iHotel
 
     public function getHotelsById($id);
 
-    public function postHotels($content): HotelApiDto;
+    public function postHotels($content): Hotel;
 
-    public function putHotels($content, $id): HotelApiDto;
+    public function putHotels($content, $id): Hotel;
 
     public function deleteHotels($id);
 
-    public function prepareResponse(Hotel $review): HotelApiDto;
+    public function prepareResponse(Hotel $review): Hotel;
 
 }

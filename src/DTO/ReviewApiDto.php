@@ -15,7 +15,7 @@ class ReviewApiDto
     /**
      * @var Hotel
      */
-    private $hoteId;
+    private $hotelId;
 
     /**
      * @var float
@@ -45,37 +45,22 @@ class ReviewApiDto
     /**
      * ReviewApiDto constructor.
      * @param int $id
-     * @param Hotel $hoteId
+     * @param Hotel $hotelId
      * @param float $score
      * @param string $comment
      * @param \DateTime $createdDate
      * @param \DateTime $createdAt
      * @param \DateTime $updatedAt
      */
-    public function __construct(int $id, Hotel $hoteId, float $score, string $comment, \DateTime $createdDate, \DateTime $createdAt, \DateTime $updatedAt)
+    public function __construct(int $id, Hotel $hotelId, float $score, string $comment, \DateTime $createdDate, \DateTime $createdAt, \DateTime $updatedAt)
     {
         $this->id = $id;
-        $this->hoteId = $hoteId;
+        $this->hotelId = $hotelId;
         $this->score = $score;
         $this->comment = $comment;
         $this->createdDate = $createdDate;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * @param $id
-     * @param $hoteId
-     * @param $score
-     * @param $comment
-     * @param $createdDate
-     * @param $createdAt
-     * @param $updatedAt
-     * @return ReviewApiDto
-     */
-    public static function create($id, $hoteId, $score, $comment, $createdDate, $createdAt, $updatedAt): ReviewApiDto
-    {
-        return new self($id, $hoteId, $score, $comment, $createdDate, $createdAt, $updatedAt);
     }
 
     /**
@@ -89,9 +74,9 @@ class ReviewApiDto
     /**
      * @return Hotel
      */
-    public function getHoteId(): Hotel
+    public function getHotelId(): Hotel
     {
-        return $this->hoteId;
+        return $this->hotelId;
     }
 
     /**

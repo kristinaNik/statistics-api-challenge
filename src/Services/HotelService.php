@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\HotelApiDto;
+use App\DTO\HotelAssembler;
 use App\Entity\Hotel;
 use App\Interfaces\iHotel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,12 +16,19 @@ class HotelService implements iHotel
     private $em;
 
     /**
-     * ReviewService constructor.
-     * @param EntityManagerInterface $entityManager
+     * @var HotelAssembler
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    private $assembler;
+
+    /**
+     * HotelService constructor.
+     * @param EntityManagerInterface $entityManager
+     * @param HotelAssembler $assembler
+     */
+    public function __construct(EntityManagerInterface $entityManager, HotelAssembler $assembler)
     {
         $this->em = $entityManager;
+        $this->assembler = $assembler;
     }
 
     /**
@@ -42,9 +50,9 @@ class HotelService implements iHotel
 
     /**
      * @param $content
-     * @return HotelApiDto
+     * @return Hotel
      */
-    public function postHotels($content): HotelApiDto
+    public function postHotels($content): Hotel
     {
         $this->em->persist($content);
         $this->em->flush();
@@ -55,14 +63,20 @@ class HotelService implements iHotel
     /**
      * @param $content
      * @param $id
-     * @return HotelApiDto
+     * @return Hotel
      */
-    public function putHotels($content, $id): HotelApiDto
+    public function putHotels($content, $id): Hotel
     {
-        $this->em->persist($content);
+        $hotel = $this->em->getRepository(Hotel::class)->find($id);
+        $hotel->setName($content->getName());
+
+        $this->em->persist($hotel);
         $this->em->flush();
 
-        return $this->prepareResponse($content);
+        if ($hotel instanceof Hotel) {
+            return $this->prepareResponse($hotel);
+        }
+
     }
 
     /**
@@ -76,18 +90,15 @@ class HotelService implements iHotel
         $this->em->flush();
     }
 
-    /**
-     * @param Hotel $hotel
-     * @return HotelApiDto
-     */
-    public function prepareResponse(Hotel $hotel): HotelApiDto
+
+    public function prepareResponse(Hotel $hotel): Hotel
     {
-        $dto = HotelApiDto::create(
+        $dto = $this->assembler->hotelDto(new HotelApiDto(
             $hotel->getId(),
             $hotel->getName(),
             $hotel->getCreatedAt(),
             $hotel->getUpdatedAt()
-        );
+        ));
 
         return $dto;
     }

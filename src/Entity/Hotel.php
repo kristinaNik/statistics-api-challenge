@@ -37,6 +37,13 @@ class Hotel
         $this->reviews = new ArrayCollection();
     }
 
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
 
     public function getId(): ?int
     {

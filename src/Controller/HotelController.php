@@ -28,7 +28,7 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels.{_format}",
+     * @Route("api/hotel.{_format}",
      *     format="json",
      *     requirements={
      *         "_format": "json",
@@ -47,7 +47,7 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/{id}.{_format}",
+     * @Route("api/hotel/{id}.{_format}",
      *     format="json",
      *     requirements={
      *         "_format": "json",
@@ -71,7 +71,7 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels.{_format}",
+     * @Route("api/hotel.{_format}",
      *     format="json",
      *     requirements={
      *         "_format": "json",
@@ -99,7 +99,7 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/{id}.{_format}",
+     * @Route("api/hotel/{id}.{_format}",
      *     format="json",
      *     requirements={
      *         "_format": "json",
@@ -133,7 +133,7 @@ class HotelController extends AbstractController
     }
 
     /**
-     * @Route("api/hotels/{id}.{_format}",
+     * @Route("api/hotel/{id}.{_format}",
      *     format="json",
      *     requirements={
      *         "_format": "json",

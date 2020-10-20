@@ -44,19 +44,6 @@ class HotelApiDto
     }
 
     /**
-     * @param $id
-     * @param $name
-     * @param $createdAt
-     * @param $updatedAt
-     *
-     * @return HotelApiDto
-     */
-    public static function create($id, $name, $createdAt, $updatedAt): HotelApiDto
-    {
-        return new self($id, $name,$createdAt, $updatedAt);
-    }
-
-    /**
      * @return mixed
      */
     public function getId()
