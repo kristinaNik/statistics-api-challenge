@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\Response\Transformer\HotelResponseTransformer;
 use App\Entity\Hotel;
 use App\Interfaces\iHotel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,8 @@ class HotelController extends AbstractController
      * @var iHotel
      */
     private $service;
+
+
 
     /**
      * HotelController constructor.
@@ -39,11 +42,11 @@ class HotelController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getHotels(Request $request): JsonResponse
+    public function indexAction(Request $request): JsonResponse
     {
-        $data = $this->service->getAllHotels();
+        $hotels = $this->service->getAllHotels();
 
-        return $this->json($data, 200, []);
+        return $this->json($hotels, 200, []);
     }
 
     /**
@@ -66,6 +69,7 @@ class HotelController extends AbstractController
         if ($data === null) {
             return $this->json(['message' => "The resource does not exist"], 404, []);
         }
+
 
         return $this->json($data, 200, []);
     }
@@ -95,6 +99,7 @@ class HotelController extends AbstractController
         }
 
         $response = $this->service->postHotels($json);
+
         return $this->json($response, 201, []);
     }
 

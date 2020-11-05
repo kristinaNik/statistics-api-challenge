@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\HotelApiDto;
 use App\DTO\HotelAssembler;
+use App\DTO\Response\Transformer\HotelResponseTransformer;
 use App\Entity\Hotel;
 use App\Interfaces\iHotel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,20 +16,21 @@ class HotelService implements iHotel
      */
     private $em;
 
+
     /**
-     * @var HotelAssembler
+     * @var HotelResponseTransformer
      */
-    private $assembler;
+    private $dtoTransformer;
 
     /**
      * HotelService constructor.
      * @param EntityManagerInterface $entityManager
-     * @param HotelAssembler $assembler
+     * @param HotelResponseTransformer $dtoTransformer
      */
-    public function __construct(EntityManagerInterface $entityManager, HotelAssembler $assembler)
+    public function __construct(EntityManagerInterface $entityManager, HotelResponseTransformer $dtoTransformer)
     {
         $this->em = $entityManager;
-        $this->assembler = $assembler;
+        $this->dtoTransformer = $dtoTransformer;
     }
 
     /**
@@ -36,7 +38,8 @@ class HotelService implements iHotel
      */
     public function getAllHotels()
     {
-        return $this->em->getRepository(Hotel::class)->findAll();
+        $hotels =  $this->em->getRepository(Hotel::class)->findAll();
+        return $this->dtoTransformer->transformFromObjects($hotels);
     }
 
     /**
@@ -45,27 +48,29 @@ class HotelService implements iHotel
      */
     public function getHotelsById($id)
     {
-        return $this->em->getRepository(Hotel::class)->find($id);
+        $hotel = $this->em->getRepository(Hotel::class)->find($id);
+        if ($hotel instanceof Hotel) {
+            return  $this->dtoTransformer->transformFromObject($hotel);
+        }
+
     }
 
     /**
      * @param $content
-     * @return Hotel
      */
-    public function postHotels($content): Hotel
+    public function postHotels($content)
     {
         $this->em->persist($content);
         $this->em->flush();
 
-        return $this->prepareResponse($content);
+        return $this->dtoTransformer->transformFromObject($content);
     }
 
     /**
      * @param $content
      * @param $id
-     * @return Hotel
      */
-    public function putHotels($content, $id): Hotel
+    public function putHotels($content, $id)
     {
         $hotel = $this->em->getRepository(Hotel::class)->find($id);
         $hotel->setName($content->getName());
@@ -74,7 +79,7 @@ class HotelService implements iHotel
         $this->em->flush();
 
         if ($hotel instanceof Hotel) {
-            return $this->prepareResponse($hotel);
+           return  $this->dtoTransformer->transformFromObject($hotel);
         }
 
     }
@@ -90,16 +95,4 @@ class HotelService implements iHotel
         $this->em->flush();
     }
 
-
-    public function prepareResponse(Hotel $hotel): Hotel
-    {
-        $dto = $this->assembler->hotelDto(new HotelApiDto(
-            $hotel->getId(),
-            $hotel->getName(),
-            $hotel->getCreatedAt(),
-            $hotel->getUpdatedAt()
-        ));
-
-        return $dto;
-    }
 }

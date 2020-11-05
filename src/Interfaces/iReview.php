@@ -4,6 +4,7 @@
 namespace App\Interfaces;
 
 use App\DTO\ReviewApiDto;
+use App\DTO\ReviewResponseDto;
 use App\Entity\Review;
 
 interface iReview
@@ -14,12 +15,10 @@ interface iReview
 
     public function getHotelById($id);
 
-    public function postReviews($content): Review;
+    public function postReviews($content): ReviewResponseDto;
 
-    public function putReviews($content, $id): Review;
+    public function putReviews($content, $id): ReviewResponseDto;
 
     public function deleteReviews($id);
-
-    public function prepareResponse(Review $review): Review;
 
 }
